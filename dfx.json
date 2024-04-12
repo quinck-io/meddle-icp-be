@@ -1,0 +1,27 @@
+{
+  "canisters": {
+    "meddle_backend": {
+      "candid": "src/meddle_backend/meddle_backend.did",
+      "package": "meddle_backend",
+      "type": "rust"
+    },
+    "meddle_frontend": {
+      "dependencies": [
+        "meddle_backend"
+      ],
+      "source": [
+        "src/meddle_frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "meddle_frontend"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
