@@ -1,3 +1,10 @@
+type JsonData = record {
+    timestap: nat64;
+    voltge: int32;
+    tension: int32;
+    temperature: int32;
+};
+
 service : {
     "greet": (text) -> (text) query;
 }
