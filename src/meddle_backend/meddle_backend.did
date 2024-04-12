@@ -31,10 +31,10 @@ type OutputData = variant {
 service : {
     "greet": (text) -> (text) query;
     "post_data": (json_data: JsonData) -> (output: Result);
-    "get_data": (offset: nat32, limit: nat32) -> (output: vec OutputData);
-    "get_record": (id_record: text) -> (output: OutputData);
-    "get_data_by_range": (start: nat64, end: opt nat64) -> (output: vec OutputData);
-    "get_data_by_temperature": (comparator: text, temp: nat32) -> (output: vec OutputData);
-    "get_data_by_voltage": (comparator: text, voltage: nat32) -> (output: vec OutputData);
-    "get_data_by_tension": (comparator: text, tension: nat32) -> (output: vec OutputData);
+    "get_record": (id_record: text) -> (output: OutputData) query;
+    "get_data": (offset: nat32, limit: nat32) -> (output: vec OutputData) query;
+    "get_data_by_range": (start: nat64, end: opt nat64) -> (output: vec OutputData) query;
+    "get_data_by_voltage": (comparator: text, voltage: nat32) -> (output: vec OutputData) query;
+    "get_data_by_tension": (comparator: text, tension: nat32) -> (output: vec OutputData) query;
+    "get_data_by_temperature": (comparator: text, temp: nat32) -> (output: vec OutputData) query;
 }
