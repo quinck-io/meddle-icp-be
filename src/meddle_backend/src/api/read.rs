@@ -44,7 +44,6 @@ pub fn get_data_by_sensor_filter(
         Err(e) => Err(e),
     }
 }
-use crate::{common::structures::Data, database::get_records};
 
 pub fn get_data_by_range(
     start: u64,
