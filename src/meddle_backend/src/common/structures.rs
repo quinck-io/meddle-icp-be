@@ -63,7 +63,7 @@ impl Comparator {
             "<" => Ok(Self::MINUS),
             "=" => Ok(Self::EQUALS),
             _ => Err(OperationResult {
-                unit_id: "Comparator".to_string(),
+                unit_id: vec![],
                 code: 500,
                 message: "Comparator not valid".to_string(),
             }),

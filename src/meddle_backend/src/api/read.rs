@@ -1,5 +1,5 @@
 use crate::{
-    common::structures::{Comparator, Data},
+    common::structures::{Comparator, Data, OperationResult},
     database::get_records,
 };
 
@@ -93,7 +93,13 @@ pub fn get_record(unit_id: String) -> Result<Vec<Data>, OperationResult> {
         .map(|x| x.clone())
         .collect::<Vec<Data>>();
 
-    if records.is_empty() { return  Err(OperationResult {unit_id: [unit_id].to_vec(), code: 404, message: String::from("Element Not Found")}) }
+    if records.is_empty() {
+        return Err(OperationResult {
+            unit_id: [unit_id].to_vec(),
+            code: 404,
+            message: String::from("Element Not Found"),
+        });
+    }
 
     Ok(records)
 }
