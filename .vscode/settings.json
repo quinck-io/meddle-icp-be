@@ -2,6 +2,7 @@
     "conventionalCommits.scopes": [
         "git",
         "candid",
-        "structure"
+        "structure",
+        "database"
     ]
 }
