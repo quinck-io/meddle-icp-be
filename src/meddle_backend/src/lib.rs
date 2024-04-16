@@ -1,4 +1,4 @@
-use common::structures::{Comparator, Data, JsonInput, OperationResult};
+use common::structures::{Comparator, Data, JsonInput, OperationResult, OutUnitId};
 
 pub mod api;
 pub mod common;
@@ -144,6 +144,20 @@ fn get_record(unit_id: String) -> Result<Vec<Data>, OperationResult> {
 #[ic_cdk::query]
 fn get_data(offset: u32, limit: u32, from_latest: bool) -> (Vec<Data>, u32) {
     crate::api::read::get_data(offset, limit, from_latest)
+}
+
+/// Retrieve all the UnitIDs of all the records
+///
+/// ## Arguments
+/// * `offset` - Offset of the first element to retrieve
+/// * `limit` - Number of elements to retrieve
+/// * `from_latest` - Flag to set the output order of the data
+///
+/// ## Returns
+/// Vector containig all the unit ids and the len of all the records
+#[ic_cdk::query]
+fn get_all_unit_ids(offset: u32, limit: u32, from_latest: bool) -> OutUnitId {
+    crate::api::read::get_all_unit_ids(offset, limit, from_latest)
 }
 
 /// Retrive all elements from the database between a specific start time to an end

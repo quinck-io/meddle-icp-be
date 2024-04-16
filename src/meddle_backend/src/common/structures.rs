@@ -21,14 +21,14 @@ pub struct JsonInput {
 
 #[derive(Debug, CandidType, Deserialize)]
 pub struct OutDataRecords {
-    data: Vec<Data>, 
+    data: Vec<Data>,
     len: u32,
 }
 
 #[derive(Debug, CandidType, Deserialize)]
 pub struct OutUnitId {
-    unit_ids: Vec<String>, 
-    len: u32,
+    pub unit_ids: Vec<String>,
+    pub len: u32,
 }
 
 #[derive(Debug, Serialize, Deserialize, CandidType, Clone)]

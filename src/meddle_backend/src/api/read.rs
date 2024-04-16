@@ -1,7 +1,8 @@
 use crate::{
-    common::structures::{Comparator, Data, OperationResult},
+    common::structures::{Comparator, Data, OperationResult, OutUnitId},
     database::get_records,
 };
+use itertools::Itertools;
 
 pub fn get_data_by_sensor(sensor: String, offset: u32, limit: u32, from_latest: bool) -> Vec<Data> {
     let mut sensor_records: Vec<Data> = get_records();
@@ -80,12 +81,15 @@ pub fn get_data(offset: u32, limit: u32, from_latest: bool) -> (Vec<Data>, u32) 
         records.reverse();
     }
 
-    (records
-        .iter()
-        .skip(offset as usize)
-        .take(limit as usize)
-        .map(|x| x.clone())
-        .collect::<Vec<Data>>(), records.len() as u32)
+    (
+        records
+            .iter()
+            .skip(offset as usize)
+            .take(limit as usize)
+            .map(|x| x.clone())
+            .collect::<Vec<Data>>(),
+        records.len() as u32,
+    )
 }
 
 pub fn get_record(unit_id: String) -> Result<Vec<Data>, OperationResult> {
@@ -104,4 +108,23 @@ pub fn get_record(unit_id: String) -> Result<Vec<Data>, OperationResult> {
     }
 
     Ok(records)
+}
+
+pub fn get_all_unit_ids(offset: u32, limit: u32, from_latest: bool) -> OutUnitId {
+    let mut records: Vec<Data> = get_records();
+    let length = records.len() as u32;
+    if from_latest {
+        records.reverse();
+    }
+    OutUnitId {
+        unit_ids: records
+            .clone()
+            .iter()
+            .map(|data| data.unit_id.clone())
+            .unique()
+            .skip(offset as usize)
+            .take(limit as usize)
+            .collect(),
+        len: length,
+    }
 }

@@ -17,6 +17,7 @@ serde = "1.0.197"
 serde_json = "=1.0.1"
 getrandom = {version = "0.2", default-features = false, features = ["custom"]}
 rand = "0.7.3"
+itertools = "0.12.1"
 
 [dependencies.uuid]
 version = "0.7"
