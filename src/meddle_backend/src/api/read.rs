@@ -4,17 +4,19 @@ use crate::{
 };
 
 pub fn get_data_by_sensor(sensor: String, offset: u32, limit: u32, from_latest: bool) -> Vec<Data> {
-    let mut sensor_records: Vec<Data> = get_records()
+    let mut sensor_records: Vec<Data> = get_records();
+
+    if from_latest {
+        sensor_records.reverse();
+    }
+
+    sensor_records
         .iter()
         .filter(|data| data.sensor_id.contains(&sensor))
         .skip(offset as usize)
         .take(limit as usize)
         .map(|elem| elem.clone())
-        .collect();
-    if !from_latest {
-        sensor_records.reverse();
-    }
-    return sensor_records.clone();
+        .collect()
 }
 
 fn compare(comparator: Comparator, to_compare: f32, fixed_value: f32) -> bool {
