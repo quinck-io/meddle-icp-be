@@ -42,7 +42,6 @@ pub fn get_data_by_sensor_filter(
         .filter(|data| compare(comparator, data.value, value))
         .map(|elem| elem.clone())
         .collect::<Vec<Data>>();
-
     OutDataRecords {
         data: sensor_records
             .iter()
