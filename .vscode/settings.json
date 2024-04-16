@@ -3,6 +3,7 @@
         "git",
         "candid",
         "structure",
-        "database"
+        "database",
+        "lib-api"
     ]
 }
