@@ -140,7 +140,7 @@ fn get_record(unit_id: String) -> Result<Vec<Data>, OperationResult> {
 /// * `from_latest` - Flag to set the output order of the data
 ///
 /// ## Returns
-/// * Vector of data
+/// * Vector of data and the length of the total records
 #[ic_cdk::query]
 fn get_data(offset: u32, limit: u32, from_latest: bool) -> OutDataRecords {
     crate::api::read::get_data(offset, limit, from_latest)
@@ -156,7 +156,7 @@ fn get_data(offset: u32, limit: u32, from_latest: bool) -> OutDataRecords {
 /// * `from_latest` - Flag to set the output order of the data
 ///
 /// ## Returns
-/// * Vector of data
+/// * Vector of data and the length of the total filtered values
 #[ic_cdk::query]
 fn get_data_by_range(
     start: u64,
@@ -177,7 +177,7 @@ fn get_data_by_range(
 /// * `from_latest` - Flag to change the output order of the data
 ///
 /// ## Return
-/// * Vector containing all data logged from the sensor given in input
+/// * Vector containing all data logged from the sensor given in input and the length of the total filtered values
 #[ic_cdk::query]
 fn get_data_by_sensor(sensor: String, offset: u32, limit: u32, from_latest: bool) -> OutDataRecords {
     crate::api::read::get_data_by_sensor(sensor, offset, limit, from_latest)
@@ -197,7 +197,7 @@ fn get_data_by_sensor(sensor: String, offset: u32, limit: u32, from_latest: bool
 /// comparator should be one of the following values: >, <, =
 ///
 /// ## Return
-/// * Vector containing all data logged from the sensor given in input
+/// * Vector containing all data logged from the sensor given in input and the length of the total filtered values
 /// * OperationResult in the case the comparator is not well formatted
 #[ic_cdk::query]
 fn get_data_by_sensor_filter(
