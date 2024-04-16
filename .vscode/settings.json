@@ -6,6 +6,7 @@
         "database",
         "lib-api",
         "read-api",
-        "create-api"
+        "create-api",
+        "docs"
     ]
 }

@@ -23,18 +23,18 @@ pub fn post_data(vec_json_data: Vec<JsonInput>) -> OperationResult {
                     });
                 
                     if res.is_err() {
-                        code = 404;
+                        code = 400;
                         return;
                     }
                 });
 
-            if code == 404 {
+            if code == 400 {
                 return;
             }
         });
 
-    if code == 404 {
-        return OperationResult {unit_id: ids, code: 404, message: String::from("Error in writing elements in database")};
+    if code == 400 {
+        return OperationResult {unit_id: ids, code, message: String::from("Error in writing elements in database")};
     }
-    OperationResult {unit_id: ids, code: 200, message: String::from("All Element Inserted Correctly")}
+    OperationResult {unit_id: ids, code, message: String::from("All Element Inserted Correctly")}
 }
