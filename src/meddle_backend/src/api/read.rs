@@ -22,6 +22,15 @@ fn compare(comparator: Comparator, to_compare: f32, fixed_value: f32) -> bool {
     }
 }
 
+fn compare(comparator: String, to_compare: f32, fixed_value: f32) -> bool {
+    match comparator.as_str() {
+        ">" => to_compare > fixed_value,
+        "<" => to_compare < fixed_value,
+        "=" => to_compare == fixed_value,
+        _ => false,
+    }
+}
+
 pub fn get_data_by_sensor_filter(
     sensor: String,
     value: f32,
@@ -73,7 +82,6 @@ pub fn get_data_by_range(
             .filter(|x| x.timestamp > start && x.timestamp < end)
             .map(|x| x.clone())
             .collect::<Vec<Data>>(),
-
         None => records
             .iter()
             .filter(|x| x.timestamp > start)
