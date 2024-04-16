@@ -1,5 +1,5 @@
 type Data = record {
-    input_id: text;
+    unit_id: text;
     sensor_id: text;
     value: float32;
     timestamp: nat64;
@@ -18,7 +18,7 @@ type JsonInput = record {
 }
 
 type Result = record {
-    id_record: text;
+    unit_id: text;
     code: nat16;
     message: text;
 };
@@ -31,7 +31,7 @@ type OutputData = variant {
 service : {
     "greet": (text) -> (text) query;
     "post_data": (vec_json_data: vec JsonInput) -> (output: Result);
-    "get_record": (id_record: text) -> (variant {Ok: Data; Err: Result}) query;
+    "get_record": (unit_id: text) -> (output: OutputData) query;
     "get_data": (offset: nat32, limit: nat32, from_recent: boolean) -> (output: OutputData) query;
     "get_data_by_range": (start: nat64, end: opt nat64, offset: nat32, limit: nat32, from_recent: boolean) -> (output: OutputData) query;
     "get_data_by_sensor": (sensor: text, offset: nat32, limit: nat32, from_recent: boolean) -> (output: OutputData) query;

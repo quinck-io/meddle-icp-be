@@ -20,7 +20,7 @@ pub struct JsonInput {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Data {
-    pub input_id: String,
+    pub unit_id: String,
     pub sensor_id: String,
     pub value: f32,
     pub timestamp: u64,
