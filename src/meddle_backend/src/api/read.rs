@@ -22,14 +22,6 @@ fn compare(comparator: Comparator, to_compare: f32, fixed_value: f32) -> bool {
     }
 }
 
-fn compare(comparator: Comparator, to_compare: f32, fixed_value: f32) -> bool {
-    match comparator {
-        Comparator::GREATER => to_compare > fixed_value,
-        Comparator::MINUS => to_compare < fixed_value,
-        Comparator::EQUALS => to_compare == fixed_value,
-    }
-}
-
 pub fn get_data_by_sensor_filter(
     sensor: String,
     value: f32,
