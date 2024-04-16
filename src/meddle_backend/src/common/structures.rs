@@ -4,25 +4,26 @@ use ic_stable_structures::{storable::Bound, Storable};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug)]
+#[allow(non_snake_case)]
 pub struct SingleInput {
-    sensorId: String,
-    value: f32,
-    timestamp: u64,
-    timestampString: String,
+    pub sensorId: String,
+    pub value: f32,
+    pub timestamp: u64,
+    pub timestampString: String,
 }
 
 #[derive(Debug)]
 pub struct JsonInput {
-    endpoint: String,
-    variables: Vec<SingleInput>,
+    pub endpoint: String,
+    pub variables: Vec<SingleInput>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Data {
-    input_id: String,
-    sensor_id: String,
-    value: f32,
-    timestamp: u64,
+    pub input_id: String,
+    pub sensor_id: String,
+    pub value: f32,
+    pub timestamp: u64,
 }
 
 impl Storable for Data {
