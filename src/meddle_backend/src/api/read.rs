@@ -22,12 +22,11 @@ fn compare(comparator: Comparator, to_compare: f32, fixed_value: f32) -> bool {
     }
 }
 
-fn compare(comparator: String, to_compare: f32, fixed_value: f32) -> bool {
-    match comparator.as_str() {
-        ">" => to_compare > fixed_value,
-        "<" => to_compare < fixed_value,
-        "=" => to_compare == fixed_value,
-        _ => false,
+fn compare(comparator: Comparator, to_compare: f32, fixed_value: f32) -> bool {
+    match comparator {
+        Comparator::GREATER => to_compare > fixed_value,
+        Comparator::MINUS => to_compare < fixed_value,
+        Comparator::EQUALS => to_compare == fixed_value,
     }
 }
 
