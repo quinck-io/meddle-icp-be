@@ -5,6 +5,7 @@
         "structure",
         "database",
         "lib-api",
-        "read-api"
+        "read-api",
+        "create-api"
     ]
 }
