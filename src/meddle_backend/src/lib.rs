@@ -71,10 +71,11 @@ fn get_data_by_sensor(sensor: String, offset: u32, limit: u32, from_recent: bool
 /// * `from_recent` - Flag to set the output order of the data
 ///
 /// ## Admissible values
-/// comparator should be one of the following values [>, <, =]
+/// comparator should be one of the following values: >, <, =
 ///
 /// ## Return
 /// * Vector containing all data logged from the sensor given in input
+/// * OperationResult in the case the comparator is not well formatted
 #[ic_cdk::query]
 fn get_data_by_sensor_filter(
     sensor: String,
