@@ -1,5 +1,5 @@
-pub mod common;
 pub mod api;
+pub mod common;
 pub mod database;
 
 #[ic_cdk::query]
