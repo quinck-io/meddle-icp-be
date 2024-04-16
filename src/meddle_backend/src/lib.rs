@@ -1,4 +1,4 @@
-use common::structures::{Comparator, Data, JsonInput, OperationResult};
+use common::structures::{Comparator, Data, JsonInput, OperationResult, OutDataRecords};
 
 pub mod api;
 pub mod common;
@@ -142,7 +142,7 @@ fn get_record(unit_id: String) -> Result<Vec<Data>, OperationResult> {
 /// ## Returns
 /// * Vector of data
 #[ic_cdk::query]
-fn get_data(offset: u32, limit: u32, from_latest: bool) -> (Vec<Data>, u32) {
+fn get_data(offset: u32, limit: u32, from_latest: bool) -> OutDataRecords {
     crate::api::read::get_data(offset, limit, from_latest)
 }
 
@@ -164,7 +164,7 @@ fn get_data_by_range(
     offset: u32,
     limit: u32,
     from_latest: bool,
-) -> Vec<Data> {
+) -> OutDataRecords {
     crate::api::read::get_data_by_range(start, end, offset, limit, from_latest)
 }
 
@@ -179,7 +179,7 @@ fn get_data_by_range(
 /// ## Return
 /// * Vector containing all data logged from the sensor given in input
 #[ic_cdk::query]
-fn get_data_by_sensor(sensor: String, offset: u32, limit: u32, from_latest: bool) -> Vec<Data> {
+fn get_data_by_sensor(sensor: String, offset: u32, limit: u32, from_latest: bool) -> OutDataRecords {
     crate::api::read::get_data_by_sensor(sensor, offset, limit, from_latest)
 }
 
@@ -207,7 +207,7 @@ fn get_data_by_sensor_filter(
     offset: u32,
     limit: u32,
     from_latest: bool,
-) -> Result<Vec<Data>, OperationResult> {
+) -> Result<OutDataRecords, OperationResult> {
     let comparator = match Comparator::from_string(comparator) {
         Ok(val) => val,
         Err(e) => {

@@ -26,12 +26,12 @@ type OperationResult = record {
 type OutDataRecords = record {
     data: vec Data; 
     len: nat32;
-}
+};
 
 type OutUnitId = record {
     unit_ids: vec text; 
     len: nat32;
-}
+};
 
 type OutputData = variant { 
     Ok: OutDataRecords;
@@ -41,7 +41,7 @@ type OutputData = variant {
 service : {
     "greet": (text) -> (text) query;
     "post_data": (vec_json_data: vec JsonInput) -> (output: OperationResult);
-    "get_record": (unit_id: text) -> (output: OutputData) query;
+    "get_record": (unit_id: text) -> (output: variant { Ok: vec Data; Err: OperationResult;}) query;
     "get_all_unit_ids": (offset: nat32, limit: nat32, from_latest: bool) -> (output: OutUnitId) query;
     "get_data": (offset: nat32, limit: nat32, from_latest: bool) -> (output: OutDataRecords) query;
     "get_data_by_range": (start: nat64, end: opt nat64, offset: nat32, limit: nat32, from_latest: bool) -> (output: OutDataRecords) query;
