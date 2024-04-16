@@ -21,8 +21,8 @@ pub struct JsonInput {
 
 #[derive(Debug, CandidType, Deserialize)]
 pub struct OutDataRecords {
-    data: Vec<Data>,
-    len: u32,
+    pub data: Vec<Data>,
+    pub len: u32,
 }
 
 #[derive(Debug, CandidType, Deserialize)]

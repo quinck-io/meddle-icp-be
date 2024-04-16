@@ -1,23 +1,36 @@
 use crate::{
-    common::structures::{Comparator, Data, OperationResult, OutUnitId},
+    common::structures::{Comparator, Data, OperationResult, OutDataRecords, OutUnitId},
     database::get_records,
 };
 use itertools::Itertools;
 
-pub fn get_data_by_sensor(sensor: String, offset: u32, limit: u32, from_latest: bool) -> Vec<Data> {
+pub fn get_data_by_sensor(
+    sensor: String,
+    offset: u32,
+    limit: u32,
+    from_latest: bool,
+) -> OutDataRecords {
     let mut sensor_records: Vec<Data> = get_records();
 
     if from_latest {
         sensor_records.reverse();
     }
 
-    sensor_records
+    let sensor_records = sensor_records
         .iter()
         .filter(|data| data.sensor_id.contains(&sensor))
-        .skip(offset as usize)
-        .take(limit as usize)
         .map(|elem| elem.clone())
-        .collect()
+        .collect::<Vec<Data>>();
+
+    OutDataRecords {
+        data: sensor_records
+            .iter()
+            .skip(offset as usize)
+            .take(limit as usize)
+            .map(|x| x.clone())
+            .collect::<Vec<Data>>(),
+        len: sensor_records.len() as u32,
+    }
 }
 
 fn compare(comparator: Comparator, to_compare: f32, fixed_value: f32) -> bool {
@@ -35,12 +48,29 @@ pub fn get_data_by_sensor_filter(
     offset: u32,
     limit: u32,
     from_latest: bool,
-) -> Vec<Data> {
-    get_data_by_sensor(sensor, offset, limit, from_latest)
+) -> OutDataRecords {
+    let mut sensor_records: Vec<Data> = get_records();
+
+    if from_latest {
+        sensor_records.reverse();
+    }
+
+    let sensor_records = sensor_records
         .iter()
+        .filter(|data| data.sensor_id.contains(&sensor))
         .filter(|data| compare(comparator, data.value, value))
-        .map(|data| data.clone())
-        .collect()
+        .map(|elem| elem.clone())
+        .collect::<Vec<Data>>();
+
+    OutDataRecords {
+        data: sensor_records
+            .iter()
+            .skip(offset as usize)
+            .take(limit as usize)
+            .map(|x| x.clone())
+            .collect::<Vec<Data>>(),
+        len: sensor_records.len() as u32,
+    }
 }
 
 pub fn get_data_by_range(
@@ -49,47 +79,53 @@ pub fn get_data_by_range(
     offset: u32,
     limit: u32,
     from_latest: bool,
-) -> Vec<Data> {
+) -> OutDataRecords {
     let mut records = get_records();
 
     if !from_latest {
         records.reverse();
     }
 
-    match end {
+    let records = match end {
         Some(end) => records
             .iter()
             .filter(|x| x.timestamp > start && x.timestamp < end)
-            .skip(offset as usize)
-            .take(limit as usize)
             .map(|x| x.clone())
             .collect::<Vec<Data>>(),
         None => records
             .iter()
             .filter(|x| x.timestamp > start)
+            .map(|x| x.clone())
+            .collect::<Vec<Data>>(),
+    };
+
+    OutDataRecords {
+        data: records
+            .iter()
             .skip(offset as usize)
             .take(limit as usize)
             .map(|x| x.clone())
             .collect::<Vec<Data>>(),
+        len: records.len() as u32,
     }
 }
 
-pub fn get_data(offset: u32, limit: u32, from_latest: bool) -> (Vec<Data>, u32) {
+pub fn get_data(offset: u32, limit: u32, from_latest: bool) -> OutDataRecords {
     let mut records = get_records();
 
     if !from_latest {
         records.reverse();
     }
 
-    (
-        records
+    OutDataRecords {
+        data: records
             .iter()
             .skip(offset as usize)
             .take(limit as usize)
             .map(|x| x.clone())
             .collect::<Vec<Data>>(),
-        records.len() as u32,
-    )
+        len: records.len() as u32,
+    }
 }
 
 pub fn get_record(unit_id: String) -> Result<Vec<Data>, OperationResult> {
