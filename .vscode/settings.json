@@ -4,6 +4,7 @@
         "candid",
         "structure",
         "database",
-        "lib-api"
+        "lib-api",
+        "read-api"
     ]
 }
