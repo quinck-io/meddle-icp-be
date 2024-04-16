@@ -1,9 +1,10 @@
 use std::borrow::Cow;
 
+use candid::CandidType;
 use ic_stable_structures::{storable::Bound, Storable};
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug)]
+#[derive(Debug, CandidType, Deserialize)]
 #[allow(non_snake_case)]
 pub struct SingleInput {
     pub sensorId: String,
@@ -12,13 +13,13 @@ pub struct SingleInput {
     pub timestampString: String,
 }
 
-#[derive(Debug)]
+#[derive(Debug, CandidType, Deserialize)]
 pub struct JsonInput {
     pub endpoint: String,
     pub variables: Vec<SingleInput>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, CandidType)]
 pub struct Data {
     pub unit_id: String,
     pub sensor_id: String,
@@ -41,7 +42,7 @@ impl Storable for Data {
     };
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, CandidType)]
 pub struct OperationResult {
     pub unit_id: String,
     pub code: u16,
