@@ -10,15 +10,15 @@ fn greet(name: String) -> String {
 }
 
 /// Add data to the database
-/// 
+///
 /// ## Arguments
-/// 
-/// * `vec_json_data` - Json containing an array of elements in which there are two fields: 
-///     Endpoint and Variables. <br> 
+///
+/// * `vec_json_data` - Json containing an array of elements in which there are two fields:
+///     Endpoint and Variables. <br>
 ///     Variables needs to be a vec of json containig the actual values that are then added to the database.
-/// 
+///
 /// ### Example of a good input:
-/// ```rust 
+/// ```rust
 /// {
 ///  "modbus-input": [
 ///    {
@@ -103,10 +103,10 @@ fn greet(name: String) -> String {
 ///  ]
 ///}
 /// ```
-/// 
-/// ## Return 
-/// 
-/// * OperationResult containing: 
+///
+/// ## Return
+///
+/// * OperationResult containing:
 ///     * A vector of unit_id, which are the ids of the units that where inserted correctly
 ///     * Code 400 if there where any error in adding the data
 ///     * A message for more information about the result
@@ -117,28 +117,28 @@ fn post_data(vec_json_data: Vec<JsonInput>) -> OperationResult {
 
 /// Get a unit Record <br>
 /// Every element in the database is part of a unit having a unique id, this API returns a vector of data of that unit
-/// 
+///
 /// ## Arguments
 /// * `unit_id` - The unique id of the unit you want as return
-/// 
+///
 /// ## Returns either
 /// * Vector of data with that unique unit_id
-/// * OperationResult in case of error containing: 
+/// * OperationResult in case of error containing:
 ///     * A vector having only the unit_id not found
-///     * Code 404 
+///     * Code 404
 ///     * A message for more information about the error
 #[ic_cdk::query]
 fn get_record(unit_id: String) -> Result<Vec<Data>, OperationResult> {
     crate::api::read::get_record(unit_id)
 }
 
-/// Retrive all elements from the database 
-/// 
+/// Retrive all elements from the database
+///
 /// ## Arguments
 /// * `offset` - Offset of the first element to retrieve
 /// * `limit` - Number of elements to retrieve
 /// * `from_latest` - Flag to set the output order of the data
-/// 
+///
 /// ## Returns
 /// * Vector of data
 #[ic_cdk::query]
@@ -146,15 +146,15 @@ fn get_data(offset: u32, limit: u32, from_latest: bool) -> Vec<Data> {
     crate::api::read::get_data(offset, limit, from_latest)
 }
 
-/// Retrive all elements from the database between a specific start time to an end 
-/// 
+/// Retrive all elements from the database between a specific start time to an end
+///
 /// ## Arguments
 /// * `start` - Timestamp in nanoseconds of the start time from which the data needs to be retrieved
 /// * `end` - Optional timestamp in nanoseconds of the end from which the data needs to be retrieved (if end in null then it is considered now as the end time)
 /// * `offset` - Offset of the first element to retrieve
 /// * `limit` - Number of elements to retrieve
 /// * `from_latest` - Flag to set the output order of the data
-/// 
+///
 /// ## Returns
 /// * Vector of data
 #[ic_cdk::query]
@@ -165,13 +165,7 @@ fn get_data_by_range(
     limit: u32,
     from_latest: bool,
 ) -> Vec<Data> {
-    crate::api::read::get_data_by_range(
-        start,
-        end,
-        offset,
-        limit,
-        from_latest,
-    )
+    crate::api::read::get_data_by_range(start, end, offset, limit, from_latest)
 }
 
 /// Get all data sent by a specific sensor
