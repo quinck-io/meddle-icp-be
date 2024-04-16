@@ -1,4 +1,4 @@
-use common::structures::{Data, JsonInput, OperationResult};
+use common::structures::{Comparator, Data, JsonInput, OperationResult};
 
 pub mod api;
 pub mod common;
@@ -45,14 +45,18 @@ fn get_data_by_range(
     ))
 }
 
-/// .
+/// Get all data sent by a specific sensor
+/// ## Arguments
+///
+/// * `sensor` - Sensor identifier
+/// * ´offset´ - Offset of the first element to retrieve
+/// * ´limit´ - Number of elements to retrieve
+/// * ´from_recent´ - Flag to change the output order of the data
+///
+/// ## Return
+/// *
 #[ic_cdk::query]
-fn get_data_by_sensor(
-    sensor: String,
-    offset: u32,
-    limit: u32,
-    from_recent: bool,
-) -> Result<Vec<Data>, OperationResult> {
+fn get_data_by_sensor(sensor: String, offset: u32, limit: u32, from_recent: bool) -> Vec<Data> {
     crate::api::read::get_data_by_sensor(sensor, offset, limit, from_recent)
 }
 
@@ -66,12 +70,19 @@ fn get_data_by_sensor_filter(
     limit: u32,
     from_recent: bool,
 ) -> Result<Vec<Data>, OperationResult> {
-    crate::api::read::get_data_by_sensor_filter(
+    let comparator = match Comparator::from_string(comparator) {
+        Ok(val) => val,
+        Err(e) => {
+            return Err(e);
+        }
+    };
+
+    Ok(crate::api::read::get_data_by_sensor_filter(
         sensor,
         value,
         comparator,
         offset,
         limit,
         from_recent,
-    )
+    ))
 }
