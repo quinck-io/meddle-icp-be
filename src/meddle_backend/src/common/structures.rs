@@ -40,3 +40,10 @@ impl Storable for Data {
         is_fixed_size: false,
     };
 }
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct OperationResult {
+    pub unit_id: String,
+    pub code: u16,
+    pub message: String,
+}
