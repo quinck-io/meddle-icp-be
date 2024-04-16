@@ -93,7 +93,7 @@ impl Storable for Data {
         serde_json::from_str(String::from_utf8(bytes.to_vec()).unwrap().as_str()).unwrap()
     }
 
-    const BOUND: ic_stable_structures::storable::Bound = Bound::Bounded {
+    const BOUND: Bound = Bound::Bounded {
         max_size: 1024,
         is_fixed_size: false,
     };
