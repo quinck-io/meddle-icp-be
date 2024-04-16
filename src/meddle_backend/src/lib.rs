@@ -171,7 +171,12 @@ fn get_all_unit_ids(offset: u32, limit: u32, from_latest: bool) -> OutUnitId {
 /// ## Returns
 /// Vector containig all the datas and the len of all the records
 #[ic_cdk::query]
-fn get_data_by_multiple_ids(ids: Vec<String>, offset: u32, limit: u32, from_latest: bool) -> Result<OutDataRecords, OperationResult> {
+fn get_data_by_multiple_ids(
+    ids: Vec<String>,
+    offset: u32,
+    limit: u32,
+    from_latest: bool,
+) -> Result<OutDataRecords, OperationResult> {
     crate::api::read::get_data_by_multiple_ids(ids, offset, limit, from_latest)
 }
 
