@@ -3,7 +3,7 @@ use crate::{
     database::get_records,
 };
 
-pub fn get_data_by_sensor(sensor: String, offset: u32, limit: u32, from_recent: bool) -> Vec<Data> {
+pub fn get_data_by_sensor(sensor: String, offset: u32, limit: u32, from_latest: bool) -> Vec<Data> {
     let mut sensor_records: Vec<Data> = get_records()
         .iter()
         .filter(|data| data.sensor_id.contains(&sensor))
@@ -11,7 +11,7 @@ pub fn get_data_by_sensor(sensor: String, offset: u32, limit: u32, from_recent: 
         .take(limit as usize)
         .map(|elem| elem.clone())
         .collect();
-    if !from_recent {
+    if !from_latest {
         sensor_records.reverse();
     }
     return sensor_records.clone();
@@ -31,9 +31,9 @@ pub fn get_data_by_sensor_filter(
     comparator: Comparator,
     offset: u32,
     limit: u32,
-    from_recent: bool,
+    from_latest: bool,
 ) -> Vec<Data> {
-    get_data_by_sensor(sensor, offset, limit, from_recent)
+    get_data_by_sensor(sensor, offset, limit, from_latest)
         .iter()
         .filter(|data| compare(comparator, data.value, value))
         .map(|data| data.clone())
@@ -43,20 +43,20 @@ pub fn get_data_by_sensor_filter(
 pub fn get_data_by_range(
     start: u64,
     end: Option<u64>,
-    offset: u64,
-    limit: u64,
-    from_recent: bool,
+    offset: u32,
+    limit: u32,
+    from_latest: bool,
 ) -> Vec<Data> {
     let mut records = get_records();
 
-    if !from_recent {
+    if !from_latest {
         records.reverse();
     }
 
     match end {
         Some(end) => records
             .iter()
-            .filter(|x| x.timestamp > start && x.timestamp > end)
+            .filter(|x| x.timestamp > start && x.timestamp < end)
             .skip(offset as usize)
             .take(limit as usize)
             .map(|x| x.clone())
@@ -71,10 +71,10 @@ pub fn get_data_by_range(
     }
 }
 
-pub fn get_data(offset: u32, limit: u32, from_recent: bool) -> Vec<Data> {
+pub fn get_data(offset: u32, limit: u32, from_latest: bool) -> Vec<Data> {
     let mut records = get_records();
 
-    if !from_recent {
+    if !from_latest {
         records.reverse();
     }
 

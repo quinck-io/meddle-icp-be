@@ -137,13 +137,13 @@ fn get_record(unit_id: String) -> Result<Vec<Data>, OperationResult> {
 /// ## Arguments
 /// * `offset` - Offset of the first element to retrieve
 /// * `limit` - Number of elements to retrieve
-/// * `from_recent` - Flag to set the output order of the data
+/// * `from_latest` - Flag to set the output order of the data
 /// 
 /// ## Returns
 /// * Vector of data
 #[ic_cdk::query]
-fn get_data(offset: u32, limit: u32, from_recent: bool) -> Vec<Data> {
-    crate::api::read::get_data(offset, limit, from_recent)
+fn get_data(offset: u32, limit: u32, from_latest: bool) -> Vec<Data> {
+    crate::api::read::get_data(offset, limit, from_latest)
 }
 
 /// Retrive all elements from the database between a specific start time to an end 
@@ -153,7 +153,7 @@ fn get_data(offset: u32, limit: u32, from_recent: bool) -> Vec<Data> {
 /// * `end` - Optional timestamp in nanoseconds of the end from which the data needs to be retrieved (if end in null then it is considered now as the end time)
 /// * `offset` - Offset of the first element to retrieve
 /// * `limit` - Number of elements to retrieve
-/// * `from_recent` - Flag to set the output order of the data
+/// * `from_latest` - Flag to set the output order of the data
 /// 
 /// ## Returns
 /// * Vector of data
@@ -161,16 +161,16 @@ fn get_data(offset: u32, limit: u32, from_recent: bool) -> Vec<Data> {
 fn get_data_by_range(
     start: u64,
     end: Option<u64>,
-    offset: u64,
-    limit: u64,
-    from_recent: bool,
+    offset: u32,
+    limit: u32,
+    from_latest: bool,
 ) -> Vec<Data> {
     crate::api::read::get_data_by_range(
         start,
         end,
         offset,
         limit,
-        from_recent,
+        from_latest,
     )
 }
 
@@ -180,13 +180,13 @@ fn get_data_by_range(
 /// * `sensor` - Sensor identifier
 /// * `offset` - Offset of the first element to retrieve
 /// * `limit` - Number of elements to retrieve
-/// * `from_recent` - Flag to change the output order of the data
+/// * `from_latest` - Flag to change the output order of the data
 ///
 /// ## Return
 /// * Vector containing all data logged from the sensor given in input
 #[ic_cdk::query]
-fn get_data_by_sensor(sensor: String, offset: u32, limit: u32, from_recent: bool) -> Vec<Data> {
-    crate::api::read::get_data_by_sensor(sensor, offset, limit, from_recent)
+fn get_data_by_sensor(sensor: String, offset: u32, limit: u32, from_latest: bool) -> Vec<Data> {
+    crate::api::read::get_data_by_sensor(sensor, offset, limit, from_latest)
 }
 
 /// Get all data sent by a specific sensor
@@ -197,7 +197,7 @@ fn get_data_by_sensor(sensor: String, offset: u32, limit: u32, from_recent: bool
 /// * `comparator` - String representing the compare to do
 /// * `offset` - Offset of the first element to retrieve
 /// * `limit` - Number of elements to retrieve
-/// * `from_recent` - Flag to set the output order of the data
+/// * `from_latest` - Flag to set the output order of the data
 ///
 /// ## Admissible values
 /// comparator should be one of the following values: >, <, =
@@ -212,7 +212,7 @@ fn get_data_by_sensor_filter(
     comparator: String,
     offset: u32,
     limit: u32,
-    from_recent: bool,
+    from_latest: bool,
 ) -> Result<Vec<Data>, OperationResult> {
     let comparator = match Comparator::from_string(comparator) {
         Ok(val) => val,
@@ -227,6 +227,6 @@ fn get_data_by_sensor_filter(
         comparator,
         offset,
         limit,
-        from_recent,
+        from_latest,
     ))
 }
