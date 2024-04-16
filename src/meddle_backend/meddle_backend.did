@@ -18,7 +18,7 @@ type JsonInput = record {
 }
 
 type OperationResult = record {
-    unit_id: text;
+    unit_id: vec text;
     code: nat16;
     message: text;
 };
@@ -32,8 +32,8 @@ service : {
     "greet": (text) -> (text) query;
     "post_data": (vec_json_data: vec JsonInput) -> (output: OperationResult);
     "get_record": (unit_id: text) -> (output: OutputData) query;
-    "get_data": (offset: nat32, limit: nat32, from_recent: boolean) -> (output: OutputData) query;
-    "get_data_by_range": (start: nat64, end: opt nat64, offset: nat32, limit: nat32, from_recent: boolean) -> (output: OutputData) query;
-    "get_data_by_sensor": (sensor: text, offset: nat32, limit: nat32, from_recent: boolean) -> (output: OutputData) query;
+    "get_data": (offset: nat32, limit: nat32, from_recent: boolean) -> (output: vec Data) query;
+    "get_data_by_range": (start: nat64, end: opt nat64, offset: nat32, limit: nat32, from_recent: boolean) -> (output: vec Data) query;
+    "get_data_by_sensor": (sensor: text, offset: nat32, limit: nat32, from_recent: boolean) -> (output: vec Data) query;
     "get_data_by_sensor_filter": (sensor: text, value: float32, comparator: text, offset: nat32, limit: nat32, from_recent: boolean) -> (output: OutputData) query;
 }

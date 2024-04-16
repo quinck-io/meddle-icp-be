@@ -1,0 +1,40 @@
+use crate::{common::{structures::{Data, JsonInput, OperationResult}, uuid::uuid_v4}, database::insert_record};
+
+pub fn post_data(vec_json_data: Vec<JsonInput>) -> OperationResult {
+
+    let mut ids: Vec<String> = Vec::new();
+    let mut code = 200;
+    vec_json_data
+        .iter()
+        .for_each(|x| {
+            
+            let unit_id = uuid_v4();
+            ids.push(unit_id.clone());
+
+            x.variables
+                .iter()
+                .for_each(|input| {
+                
+                    let res = insert_record( Data {
+                        unit_id: unit_id.clone(),
+                        sensor_id: input.sensorId.clone(),
+                        value: input.value,
+                        timestamp: input.timestamp
+                    });
+                
+                    if res.is_err() {
+                        code = 404;
+                        return;
+                    }
+                });
+
+            if code == 404 {
+                return;
+            }
+        });
+
+    if code == 404 {
+        return OperationResult {unit_id: ids, code: 404, message: String::from("Error in writing elements in database")};
+    }
+    OperationResult {unit_id: ids, code: 200, message: String::from("All Element Inserted Correctly")}
+}

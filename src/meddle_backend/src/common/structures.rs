@@ -44,7 +44,7 @@ impl Storable for Data {
 
 #[derive(Debug, Serialize, Deserialize, CandidType)]
 pub struct OperationResult {
-    pub unit_id: String,
+    pub unit_id: Vec<String>,
     pub code: u16,
     pub message: String,
 }
