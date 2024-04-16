@@ -44,7 +44,6 @@ pub fn get_data_by_sensor_filter(
         Err(e) => Err(e),
     }
 }
-use crate::{common::structures::Data, database::get_records};
 
 pub fn get_data_by_range(
     start: u64,
@@ -60,13 +59,15 @@ pub fn get_data_by_range(
     }
 
     match end {
+
         Some(end) => records
             .iter()
-            .filter(|x| x.timestamp > start && x.timestamp > end)
+            .filter(|x| x.timestamp > start && x.timestamp < end)
             .skip(offset as usize)
             .take(limit as usize)
             .map(|x| x.clone())
             .collect::<Vec<Data>>(),
+
         None => records
             .iter()
             .filter(|x| x.timestamp > start)
