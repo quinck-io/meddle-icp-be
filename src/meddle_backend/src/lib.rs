@@ -29,18 +29,49 @@ fn get_data(offset: u32, limit: u32, from_recent: bool) -> Result<Vec<Data>, Ope
 
 /// .
 #[ic_cdk::query]
-fn get_data_by_range(start: u64, end: Option<u64>, offset: u64, limit: u64, from_recent: bool) -> Result<Vec<Data>, OperationResult> {
-    Ok(crate::api::read::get_data_by_range(start, end, offset, limit, from_recent))
+fn get_data_by_range(
+    start: u64,
+    end: Option<u64>,
+    offset: u64,
+    limit: u64,
+    from_recent: bool,
+) -> Result<Vec<Data>, OperationResult> {
+    Ok(crate::api::read::get_data_by_range(
+        start,
+        end,
+        offset,
+        limit,
+        from_recent,
+    ))
 }
 
 /// .
 #[ic_cdk::query]
-fn get_data_by_sensor(sensor: String, offset: u32, limit: u32, from_recent: bool) -> Result<Vec<Data>, OperationResult> {
-    todo!()
+fn get_data_by_sensor(
+    sensor: String,
+    offset: u32,
+    limit: u32,
+    from_recent: bool,
+) -> Result<Vec<Data>, OperationResult> {
+    crate::api::read::get_data_by_sensor(sensor, offset, limit, from_recent)
 }
 
 /// .
 #[ic_cdk::query]
-fn get_data_by_sensor_filter(sensor: String, value: f32, comparator: String, offset: u32, limit: u32, from_recent: bool) -> Result<Vec<Data>, OperationResult> {
-    todo!()
+fn get_data_by_sensor_filter(
+    sensor: String,
+    value: f32,
+    comparator: String,
+    offset: u32,
+    limit: u32,
+    from_recent: bool,
+) -> Result<Vec<Data>, OperationResult> {
+    crate::api::read::get_data_by_sensor_filter(
+        sensor,
+        value,
+        comparator,
+        offset,
+        limit,
+        from_recent,
+    )
 }

@@ -22,6 +22,15 @@ pub fn get_data_by_sensor(
     return Ok(sensor_records.clone());
 }
 
+fn compare(comparator: String, to_compare: f32, fixed_value: f32) -> bool {
+    match comparator.as_str() {
+        ">" => to_compare > fixed_value,
+        "<" => to_compare < fixed_value,
+        "=" => to_compare == fixed_value,
+        _ => false,
+    }
+}
+
 pub fn get_data_by_sensor_filter(
     sensor: String,
     value: f32,
@@ -31,16 +40,11 @@ pub fn get_data_by_sensor_filter(
     from_recent: bool,
 ) -> Result<Vec<Data>, OperationResult> {
     match get_data_by_sensor(sensor, offset, limit, from_recent) {
-        Ok(vector) => match comparator.as_str() {
-            ">" => {
-                return Ok(vector
-                    .iter()
-                    .filter(|data| data.value > value)
-                    .map(|data| data.clone())
-                    .collect::<Vec<Data>>())
-            }
-            _ => return Ok(vector),
-        },
+        Ok(vector) => Ok(vector
+            .iter()
+            .filter(|data| compare(comparator.clone(), data.value, value))
+            .map(|data| data.clone())
+            .collect()),
         Err(e) => Err(e),
     }
 }
@@ -59,15 +63,13 @@ pub fn get_data_by_range(
     }
 
     match end {
-
         Some(end) => records
             .iter()
-            .filter(|x| x.timestamp > start && x.timestamp < end)
+            .filter(|x| x.timestamp > start && x.timestamp > end)
             .skip(offset as usize)
             .take(limit as usize)
             .map(|x| x.clone())
             .collect::<Vec<Data>>(),
-
         None => records
             .iter()
             .filter(|x| x.timestamp > start)
