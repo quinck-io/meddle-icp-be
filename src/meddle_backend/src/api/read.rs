@@ -73,19 +73,19 @@ pub fn get_data_by_range(
     }
 }
 
-pub fn get_data(offset: u32, limit: u32, from_latest: bool) -> Vec<Data> {
+pub fn get_data(offset: u32, limit: u32, from_latest: bool) -> (Vec<Data>, u32) {
     let mut records = get_records();
 
     if !from_latest {
         records.reverse();
     }
 
-    records
+    (records
         .iter()
         .skip(offset as usize)
         .take(limit as usize)
         .map(|x| x.clone())
-        .collect::<Vec<Data>>()
+        .collect::<Vec<Data>>(), records.len() as u32)
 }
 
 pub fn get_record(unit_id: String) -> Result<Vec<Data>, OperationResult> {

@@ -19,6 +19,18 @@ pub struct JsonInput {
     pub variables: Vec<SingleInput>,
 }
 
+#[derive(Debug, CandidType, Deserialize)]
+pub struct OutDataRecords {
+    data: Vec<Data>, 
+    len: u32,
+}
+
+#[derive(Debug, CandidType, Deserialize)]
+pub struct OutUnitId {
+    unit_ids: Vec<String>, 
+    len: u32,
+}
+
 #[derive(Debug, Serialize, Deserialize, CandidType, Clone)]
 pub struct Data {
     pub unit_id: String,

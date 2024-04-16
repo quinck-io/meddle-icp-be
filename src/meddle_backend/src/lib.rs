@@ -142,7 +142,7 @@ fn get_record(unit_id: String) -> Result<Vec<Data>, OperationResult> {
 /// ## Returns
 /// * Vector of data
 #[ic_cdk::query]
-fn get_data(offset: u32, limit: u32, from_latest: bool) -> Vec<Data> {
+fn get_data(offset: u32, limit: u32, from_latest: bool) -> (Vec<Data>, u32) {
     crate::api::read::get_data(offset, limit, from_latest)
 }
 
