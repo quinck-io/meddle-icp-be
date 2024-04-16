@@ -48,3 +48,25 @@ pub struct OperationResult {
     pub code: u16,
     pub message: String,
 }
+
+#[derive(Debug, Clone, Copy)]
+pub enum Comparator {
+    MINUS,
+    EQUALS,
+    GREATER,
+}
+
+impl Comparator {
+    pub fn from_string(comparator: String) -> Result<Comparator, OperationResult> {
+        match comparator.as_str() {
+            ">" => Ok(Self::GREATER),
+            "<" => Ok(Self::MINUS),
+            "=" => Ok(Self::EQUALS),
+            _ => Err(OperationResult {
+                unit_id: vec![],
+                code: 500,
+                message: "Comparator not valid".to_string(),
+            }),
+        }
+    }
+}
