@@ -85,3 +85,15 @@ pub fn get_data(offset: u32, limit: u32, from_recent: bool) -> Vec<Data> {
         .map(|x| x.clone())
         .collect::<Vec<Data>>()
 }
+
+pub fn get_record(unit_id: String) -> Result<Vec<Data>, OperationResult> {
+    let records = get_records()
+        .iter()
+        .filter(|x| x.unit_id == unit_id)
+        .map(|x| x.clone())
+        .collect::<Vec<Data>>();
+
+    if records.is_empty() { return  Err(OperationResult {unit_id: [unit_id].to_vec(), code: 404, message: String::from("Element Not Found")}) }
+
+    Ok(records)
+}
