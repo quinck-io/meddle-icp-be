@@ -73,6 +73,7 @@ pub fn get_data_by_range(
             .filter(|x| x.timestamp > start && x.timestamp < end)
             .map(|x| x.clone())
             .collect::<Vec<Data>>(),
+
         None => records
             .iter()
             .filter(|x| x.timestamp > start)
