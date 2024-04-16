@@ -19,7 +19,7 @@ pub struct JsonInput {
     pub variables: Vec<SingleInput>,
 }
 
-#[derive(Debug, Serialize, Deserialize, CandidType)]
+#[derive(Debug, Serialize, Deserialize, CandidType, Clone)]
 pub struct Data {
     pub unit_id: String,
     pub sensor_id: String,

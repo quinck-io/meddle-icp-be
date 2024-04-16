@@ -24,13 +24,13 @@ fn get_record(unit_id: String) -> Result<Vec<Data>, OperationResult> {
 /// .
 #[ic_cdk::query]
 fn get_data(offset: u32, limit: u32, from_recent: bool) -> Result<Vec<Data>, OperationResult> {
-    todo!()
+    Ok(crate::api::read::get_data(offset, limit, from_recent))
 }
 
 /// .
 #[ic_cdk::query]
 fn get_data_by_range(start: u64, end: Option<u64>, offset: u64, limit: u64, from_recent: bool) -> Result<Vec<Data>, OperationResult> {
-    todo!()
+    Ok(crate::api::read::get_data_by_range(start, end, offset, limit, from_recent))
 }
 
 /// .
