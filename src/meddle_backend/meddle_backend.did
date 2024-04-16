@@ -1,21 +1,21 @@
-type JsonData = variant {
-    
-    MachineData: record {
-        id: text;
-        timestap: nat64;
-        voltge: int32;
-        tension: int32;
-        temperature: int32;
-    };
+type Data = record {
+    input_id: text;
+    sensor_id: text;
+    value: float32;
+    timestamp: nat64;
+}
 
-    MachineDataCreation: record {
-        timestap: nat64;
-        voltge: int32;
-        tension: int32;
-        temperature: int32;
-    };
+type SingleInput = record {
+    sensorId: text;
+    value: float32;
+    timestamp: nat64;
+    timestampString: text;
+}
 
-};
+type JsonInput = record {
+    endopoint: text;
+    variables: vec SingleInput;
+}
 
 type Result = record {
     id_record: text;
@@ -24,17 +24,16 @@ type Result = record {
 };
 
 type OutputData = variant { 
-    Ok: vec JsonData; 
+    Ok: vec Data; 
     Err: Result;
 };
 
 service : {
     "greet": (text) -> (text) query;
-    "post_data": (json_data: JsonData) -> (output: Result);
-    "get_record": (id_record: text) -> (variant {Ok: JsonData; Err: Result}) query;
-    "get_data": (offset: nat32, limit: nat32) -> (output: OutputData) query;
-    "get_data_by_range": (start: nat64, end: opt nat64) -> (output: OutputData) query;
-    "get_data_by_voltage": (comparator: text, voltage: nat32) -> (output: OutputData) query;
-    "get_data_by_tension": (comparator: text, tension: nat32) -> (output: OutputData) query;
-    "get_data_by_temperature": (comparator: text, temp: nat32) -> (output: OutputData) query;
+    "post_data": (vec_json_data: vec JsonInput) -> (output: Result);
+    "get_record": (id_record: text) -> (variant {Ok: Data; Err: Result}) query;
+    "get_data": (offset: nat32, limit: nat32, from_recent: boolean) -> (output: OutputData) query;
+    "get_data_by_range": (start: nat64, end: opt nat64, offset: nat32, limit: nat32, from_recent: boolean) -> (output: OutputData) query;
+    "get_data_by_sensor": (sensor: text, offset: nat32, limit: nat32, from_recent: boolean) -> (output: OutputData) query;
+    "get_data_by_sensor_filter": (sensor: text, value: float32, comparator: text, offset: nat32, limit: nat32, from_recent: boolean) -> (output: OutputData) query;
 }
