@@ -21,8 +21,8 @@ jobs:
       - name: Install cargo-audit
         run: cargo install cargo-audit
 
-      - name: Build
-        run: cargo build --verbose
+      # - name: Build
+      #   run: cargo build --verbose
 
       - name: Lint with Clippy
         run: cargo clippy --verbose -- -D warnings
