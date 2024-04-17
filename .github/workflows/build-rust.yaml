@@ -1,0 +1,41 @@
+name: Rust
+
+on:
+  push:
+    branches: ["main", "dev"]
+  pull_request:
+    branches: ["main", "dev"]
+
+env:
+  CARGO_TERM_COLOR: always
+  WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+jobs:
+  build:
+    runs-on: self-hosted-x64
+    container:
+      image: rust:bookworm
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install cargo-audit
+        run: cargo install cargo-audit
+
+      - name: Build
+        run: cargo build --verbose
+
+      - name: Lint with Clippy
+        run: cargo clippy --verbose -- -D warnings
+
+      - name: Audit
+        run: cargo audit
+
+      - name: Notify Discord - Successful Deployment
+        if: ${{ success() }}
+        run: >
+          curl -H "Content-Type: application/json" -d "{\"embeds\": [{\"title\": \"Successful deployment for branch $GITHUB_REF_NAME\", \"description\": \"Author: ${{ github.event.head_commit.author.name }}\nCommit URL: ${{ github.event.head_commit.url }}\nCommit: ${{ github.event.head_commit.message }}\", \"color\": 65280}]}" $WEBHOOK_URL
+
+      - name: Notify Discord - Deployment Failed
+        if: ${{ failure() }}
+        run: >
+          curl -H "Content-Type: application/json" -d "{\"embeds\": [{\"title\": \"Deployment failed for branch $GITHUB_REF_NAME\", \"description\": \"Author: ${{ github.event.head_commit.author.name }}\nCommit URL: ${{ github.event.head_commit.url }}\nCommit: ${{ github.event.head_commit.message }}\", \"color\": 16711680}]}" $WEBHOOK_URL
