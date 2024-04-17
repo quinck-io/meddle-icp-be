@@ -1,0 +1,51 @@
+type Data = record {
+    unit_id: text;
+    sensor_id: text;
+    value: float32;
+    timestamp: nat64;
+};
+
+type SingleInput = record {
+    sensorId: text;
+    value: float32;
+    timestamp: nat64;
+    timestampString: text;
+};
+
+type JsonInput = record {
+    endpoint: text;
+    variables: vec SingleInput;
+};
+
+type OperationResult = record {
+    unit_id: vec text;
+    code: nat16;
+    message: text;
+};
+
+type OutDataRecords = record {
+    data: vec Data; 
+    len: nat32;
+};
+
+type OutUnitId = record {
+    unit_ids: vec text; 
+    len: nat32;
+};
+
+type OutputData = variant { 
+    Ok: OutDataRecords;
+    Err: OperationResult;
+};
+
+service : {
+    "greet": (text) -> (text) query;
+    "post_data": (vec_json_data: vec JsonInput) -> (output: OperationResult);
+    "get_record": (unit_id: text) -> (output: variant { Ok: vec Data; Err: OperationResult;}) query;
+    "get_all_unit_ids": (offset: nat32, limit: nat32, from_latest: bool) -> (output: OutUnitId) query;
+    "get_data": (offset: nat32, limit: nat32, from_latest: bool) -> (output: OutDataRecords) query;
+    "get_data_by_multiple_ids": (ids: vec text, offset: nat32, limit: nat32, from_latest: bool) -> (output: OutputData) query;
+    "get_data_by_range": (start: nat64, end: opt nat64, offset: nat32, limit: nat32, from_latest: bool) -> (output: OutDataRecords) query;
+    "get_data_by_sensor": (sensor: text, offset: nat32, limit: nat32, from_latest: bool) -> (output: OutDataRecords) query;
+    "get_data_by_sensor_filter": (sensor: text, value: float32, comparator: text, offset: nat32, limit: nat32, from_latest: bool) -> (output: OutputData) query;
+}

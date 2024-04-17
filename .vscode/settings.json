@@ -1,0 +1,12 @@
+{
+    "conventionalCommits.scopes": [
+        "git",
+        "candid",
+        "structure",
+        "database",
+        "lib-api",
+        "read-api",
+        "create-api",
+        "docs"
+    ]
+}
