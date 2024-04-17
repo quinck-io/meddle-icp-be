@@ -129,19 +129,20 @@ pub fn get_record(unit_id: String) -> Result<Vec<Data>, OperationResult> {
 
 pub fn get_all_unit_ids(offset: u32, limit: u32, from_latest: bool) -> OutUnitId {
     let mut records: Vec<Data> = get_records();
-    let length = records.len() as u32;
+
     if from_latest {
         records.reverse();
     }
+
+    let unit_ids = records.iter().map(|d| d.unit_id.clone());
+
     OutUnitId {
-        unit_ids: records
+        unit_ids: unit_ids
             .clone()
-            .iter()
-            .map(|data| data.unit_id.clone())
             .unique()
             .skip(offset as usize)
             .take(limit as usize)
             .collect(),
-        len: length,
+        len: unit_ids.unique().collect::<Vec<String>>().len() as u32,
     }
 }
