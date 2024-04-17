@@ -109,6 +109,39 @@ pub fn get_data(offset: u32, limit: u32, from_latest: bool) -> OutDataRecords {
     }
 }
 
+pub fn get_data_by_multiple_ids(ids: Vec<String>, offset: u32, limit: u32, from_latest: bool) -> Result<OutDataRecords, OperationResult> {
+    let mut records = get_records();
+
+    if !from_latest {
+        records.reverse();
+    }
+
+    records = records
+        .iter()
+        .filter(|x| ids.contains(&x.unit_id))
+        .map(|x| x.clone())
+        .collect::<Vec<Data>>();
+
+
+    if records.is_empty() {
+        return Err(OperationResult {
+            unit_id: ids,
+            code: 404,
+            message: String::from("Elements Not Found"),
+        });
+    }
+
+    Ok( OutDataRecords {
+        data: records
+            .iter()
+            .skip(offset as usize)
+            .take(limit as usize)
+            .map(|x| x.clone())
+            .collect::<Vec<Data>>(),
+        len: records.len() as u32,
+    } )
+}
+
 pub fn get_record(unit_id: String) -> Result<Vec<Data>, OperationResult> {
     let records = get_records()
         .iter()
