@@ -1,8 +1,13 @@
 use std::borrow::Cow;
-
 use candid::CandidType;
-use ic_stable_structures::{storable::Bound, Storable};
+use ic_stable_structures::{log::WriteError, storable::Bound, Storable};
 use serde::{Deserialize, Serialize};
+use serde_json::Error;
+
+pub enum InsertionError {
+    FullStorage(WriteError),
+    InsertionFailed(String),
+}
 
 #[derive(Debug, CandidType, Deserialize)]
 #[allow(non_snake_case)]
@@ -40,11 +45,13 @@ pub struct Data {
 }
 
 impl Storable for Data {
-    fn to_bytes(&self) -> Cow<[u8]> {
+    fn to_bytes(&self) -> Cow<[u8]> { 
+
         Cow::Owned(serde_json::to_string(self).unwrap().as_bytes().to_vec())
     }
 
     fn from_bytes(bytes: Cow<[u8]>) -> Self {
+
         serde_json::from_str(String::from_utf8(bytes.to_vec()).unwrap().as_str()).unwrap()
     }
 
@@ -52,6 +59,12 @@ impl Storable for Data {
         max_size: 1024,
         is_fixed_size: false,
     };
+}
+
+impl Data {
+    pub fn check_to_string(&self) -> Result<String, Error> {
+        serde_json::to_string(self)
+    }
 }
 
 #[derive(Debug, Serialize, Deserialize, CandidType)]
