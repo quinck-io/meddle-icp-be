@@ -4,11 +4,12 @@ pub fn post_data(vec_json_data: Vec<JsonInput>) -> OperationResult {
 
     let mut ids: Vec<String> = Vec::new();
     let mut code = 200;
+    let mut local_timestamp = Option::None;
     vec_json_data
         .iter()
         .for_each(|x| {
             
-            let unit_id = uuid_v4();
+            let unit_id = uuid_v4(local_timestamp);
             ids.push(unit_id.clone());
 
             x.variables
@@ -26,6 +27,8 @@ pub fn post_data(vec_json_data: Vec<JsonInput>) -> OperationResult {
                         code = 400;
                         return;
                     }
+
+                    local_timestamp = Option::from(input.timestamp);
                 });
 
             if code == 400 {
