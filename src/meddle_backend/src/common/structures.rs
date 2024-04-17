@@ -47,12 +47,13 @@ pub struct Data {
 impl Storable for Data {
     fn to_bytes(&self) -> Cow<[u8]> { 
 
-        Cow::Owned(serde_json::to_string(self).unwrap().as_bytes().to_vec())
+        Cow::Owned(serde_json::to_string(self).expect("failed to serialize to bytes").as_bytes().to_vec())
     }
 
     fn from_bytes(bytes: Cow<[u8]>) -> Self {
 
-        serde_json::from_str(String::from_utf8(bytes.to_vec()).unwrap().as_str()).unwrap()
+        serde_json::from_str(String::from_utf8(bytes.to_vec()).expect("failed to serialize from bytes").as_str())
+            .expect("failed to serialize from bytes")
     }
 
     const BOUND: Bound = Bound::Bounded {
