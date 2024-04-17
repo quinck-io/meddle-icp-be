@@ -1,4 +1,6 @@
+use candid::Principal;
 use common::structures::{Comparator, Data, JsonInput, OperationResult, OutDataRecords, OutUnitId};
+use ic_cdk::{api::call, caller};
 
 pub mod api;
 pub mod common;
@@ -7,6 +9,12 @@ pub mod database;
 #[ic_cdk::query]
 fn greet(name: String) -> String {
     format!("Hello, {}!", name)
+}
+
+#[ic_cdk::query]
+fn whoami() -> Principal {
+    ic_cdk::println!("{}", caller());
+    caller()
 }
 
 /// Add data to the database
