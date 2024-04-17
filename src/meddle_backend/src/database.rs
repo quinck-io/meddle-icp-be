@@ -1,10 +1,7 @@
-use ic_stable_structures::log::WriteError;
 use ic_stable_structures::memory_manager::{MemoryId, MemoryManager, VirtualMemory};
 use ic_stable_structures::{DefaultMemoryImpl, Log};
-
 use std::cell::RefCell;
-
-use crate::common::structures::Data;
+use crate::common::structures::{Data, InsertionError};
 
 type Memory = VirtualMemory<DefaultMemoryImpl>;
 
@@ -22,9 +19,16 @@ thread_local! {
 }
 
 pub fn get_records() -> Vec<Data> {
+    
     SENSOR_RECORDS.with(|x| x.borrow().iter().collect::<Vec<Data>>())
 }
 
-pub fn insert_record(data: Data) -> Result<u64, WriteError> {
-    SENSOR_RECORDS.with(|x| x.borrow_mut().append(&data))
+pub fn insert_record(data: Data) -> Result<u64, InsertionError> {
+    
+    match data.check_to_string() {
+        Ok(_) => SENSOR_RECORDS.with(|x| x.borrow_mut().append(&data))
+            .map_err(|x| InsertionError::FullStorage(x)),
+        Err(e) => Err(format!("Input's implementation of Serialize decided to fail, or input contains a map with non-string keys: {:?}", e))
+            .map_err(|x| InsertionError::InsertionFailed(x)),
+    }
 }
