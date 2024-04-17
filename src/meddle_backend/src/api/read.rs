@@ -39,16 +39,14 @@ pub fn get_data_by_sensor_filter(
     let sensor_records = sensor_records
         .iter()
         .filter(|data| data.sensor_id.contains(&sensor))
-        .filter(|data| compare(comparator, data.value, value))
-        .map(|elem| elem.clone())
+        .filter(|data| compare(comparator, data.value, value)).cloned()
         .collect::<Vec<Data>>();
 
     OutDataRecords {
         data: sensor_records
             .iter()
             .skip(offset as usize)
-            .take(limit as usize)
-            .map(|x| x.clone())
+            .take(limit as usize).cloned()
             .collect::<Vec<Data>>(),
         len: sensor_records.len() as u32,
     }
@@ -70,13 +68,11 @@ pub fn get_data_by_range(
     let records = match end {
         Some(end) => records
             .iter()
-            .filter(|x| x.timestamp > start && x.timestamp < end)
-            .map(|x| x.clone())
+            .filter(|x| x.timestamp > start && x.timestamp < end).cloned()
             .collect::<Vec<Data>>(),
         None => records
             .iter()
-            .filter(|x| x.timestamp > start)
-            .map(|x| x.clone())
+            .filter(|x| x.timestamp > start).cloned()
             .collect::<Vec<Data>>(),
     };
 
@@ -84,8 +80,7 @@ pub fn get_data_by_range(
         data: records
             .iter()
             .skip(offset as usize)
-            .take(limit as usize)
-            .map(|x| x.clone())
+            .take(limit as usize).cloned()
             .collect::<Vec<Data>>(),
         len: records.len() as u32,
     }
@@ -102,8 +97,7 @@ pub fn get_data(offset: u32, limit: u32, from_latest: bool) -> OutDataRecords {
         data: records
             .iter()
             .skip(offset as usize)
-            .take(limit as usize)
-            .map(|x| x.clone())
+            .take(limit as usize).cloned()
             .collect::<Vec<Data>>(),
         len: records.len() as u32,
     }
@@ -118,8 +112,7 @@ pub fn get_data_by_multiple_ids(ids: Vec<String>, offset: u32, limit: u32, from_
 
     records = records
         .iter()
-        .filter(|x| ids.contains(&x.unit_id))
-        .map(|x| x.clone())
+        .filter(|x| ids.contains(&x.unit_id)).cloned()
         .collect::<Vec<Data>>();
 
 
@@ -135,8 +128,7 @@ pub fn get_data_by_multiple_ids(ids: Vec<String>, offset: u32, limit: u32, from_
         data: records
             .iter()
             .skip(offset as usize)
-            .take(limit as usize)
-            .map(|x| x.clone())
+            .take(limit as usize).cloned()
             .collect::<Vec<Data>>(),
         len: records.len() as u32,
     } )
@@ -145,8 +137,7 @@ pub fn get_data_by_multiple_ids(ids: Vec<String>, offset: u32, limit: u32, from_
 pub fn get_record(unit_id: String) -> Result<Vec<Data>, OperationResult> {
     let records = get_records()
         .iter()
-        .filter(|x| x.unit_id == unit_id)
-        .map(|x| x.clone())
+        .filter(|x| x.unit_id == unit_id).cloned()
         .collect::<Vec<Data>>();
 
     if records.is_empty() {

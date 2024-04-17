@@ -27,8 +27,8 @@ pub fn insert_record(data: Data) -> Result<u64, InsertionError> {
     
     match data.check_to_string() {
         Ok(_) => SENSOR_RECORDS.with(|x| x.borrow_mut().append(&data))
-            .map_err(|x| InsertionError::FullStorage(x)),
+            .map_err(InsertionError::FullStorage),
         Err(e) => Err(format!("Input's implementation of Serialize decided to fail, or input contains a map with non-string keys: {:?}", e))
-            .map_err(|x| InsertionError::InsertionFailed(x)),
+            .map_err(InsertionError::InsertionFailed),
     }
 }

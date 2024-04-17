@@ -6,7 +6,7 @@ pub fn uuid_v4(local_timestamp: Option<u64>) -> String {
     // (rand requires stdweb / wasm-bindgen feature enabled to work on the wasm32 arch).
     // We have added rand as our direct dependency with wasm-bindgen feature enabled
     // and following is a copy & paste of the Uuid::new_v4() method to make it working.
-    let mut rng = StdRng::seed_from_u64(ic_cdk::api::time() + match local_timestamp { Some(x) => x, None => 0 });
+    let mut rng = StdRng::seed_from_u64(ic_cdk::api::time() + local_timestamp.unwrap_or(0));
     let mut bytes = [0; 16];
 
     rng.fill_bytes(&mut bytes);
