@@ -66,6 +66,7 @@ pub enum Comparator {
     MINUS,
     EQUALS,
     GREATER,
+    ANY,
 }
 
 impl Comparator {

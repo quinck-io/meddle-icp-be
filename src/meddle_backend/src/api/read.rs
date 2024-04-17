@@ -10,27 +10,7 @@ pub fn get_data_by_sensor(
     limit: u32,
     from_latest: bool,
 ) -> OutDataRecords {
-    let mut sensor_records: Vec<Data> = get_records();
-
-    if from_latest {
-        sensor_records.reverse();
-    }
-
-    let sensor_records = sensor_records
-        .iter()
-        .filter(|data| data.sensor_id.contains(&sensor))
-        .map(|elem| elem.clone())
-        .collect::<Vec<Data>>();
-
-    OutDataRecords {
-        data: sensor_records
-            .iter()
-            .skip(offset as usize)
-            .take(limit as usize)
-            .map(|x| x.clone())
-            .collect::<Vec<Data>>(),
-        len: sensor_records.len() as u32,
-    }
+    get_data_by_sensor_filter(sensor, 0f32, Comparator::ANY, offset, limit, from_latest)
 }
 
 fn compare(comparator: Comparator, to_compare: f32, fixed_value: f32) -> bool {
@@ -38,6 +18,7 @@ fn compare(comparator: Comparator, to_compare: f32, fixed_value: f32) -> bool {
         Comparator::GREATER => to_compare > fixed_value,
         Comparator::MINUS => to_compare < fixed_value,
         Comparator::EQUALS => to_compare == fixed_value,
+        Comparator::ANY => true,
     }
 }
 
