@@ -1,22 +1,47 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+  <head>
+    <style>
+      :root {
+      }
 
-<head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/ic.svg" />
+      body {
+        margin: 0;
+        font-family: Helvetica, Arial, Sans-Serif;
+      }
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital@1&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital@0;1&display=swap" rel="stylesheet">
+      img {
+      }
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>React Demo - ic-use-internet-identity</title>
-</head>
+      main {
+        max-width: 800px;
+        margin: 0 auto;
+        text-align: center;
+      }
 
-<body>
-  <div id="root"></div>
-  <script type="module" src="/src/main.tsx"></script>
-</body>
+      section {
+        padding: 1em 0;
+      }
+    </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Internet Identity Demo Webapp</title>
+  </head>
+  <body>
+    <main>
+      <h1>Internet Identity Demo Webapp</h1>
+      <section>
+        <label for="iiUrl">Internet Identity URL:</label>
+        <input size="50" id="iiUrl" type="text" />
+      </section>
+      <section>
+        <button id="loginBtn">Login with Internet Identity</button>
+      </section>
+      <section id="loginStatus">
+        <p>Not logged in</p>
+      </section>
+    </main>
 
+    <script type="module" src="/index.ts"></script>
+  </body>
 </html>

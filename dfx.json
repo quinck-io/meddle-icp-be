@@ -18,7 +18,7 @@
     },
     "meddle_frontend": {
       "dependencies": [
-        "meddle_backend"
+        "meddle_backend", "internet_identity"
       ],
       "source": [
         "src/meddle_frontend/dist"
