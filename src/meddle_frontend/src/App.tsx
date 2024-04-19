@@ -12,11 +12,8 @@ export interface _SERVICE {
   whoami: ActorMethod<[], Principal>;
 }
 
-
 function App() {
-
   const webapp_id = process.env.CANISTER_ID_MEDDLE_BACKEND;
-
 
   // @ts-ignore - The interface of the whoami canister
   const webapp_idl = ({ IDL }) => {
