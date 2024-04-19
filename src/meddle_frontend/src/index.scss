@@ -3,6 +3,10 @@ body {
   font-size: 1.5rem;
 }
 
+html {
+  @apply font-sans bg-slate-700 text-zinc-300;
+}
+
 img {
   max-width: 50vw;
   max-height: 25vw;

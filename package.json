@@ -16,6 +16,11 @@
     "src/meddle_frontend"
   ],
   "dependencies": {
-    "@dfinity/auth-client": "^1.2.0"
+    "@dfinity/agent": "^1.2.0",
+    "@dfinity/auth-client": "^1.2.0",
+    "@dfinity/identity": "^1.2.0",
+    "ic-use-actor": "^0.0.9",
+    "ic-use-internet-identity": "^0.0.10",
+    "react-hot-toast": "^2.4.1"
   }
 }
