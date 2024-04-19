@@ -1,10 +1,11 @@
+use common::guards::caller_is_user;
 use common::structures::{Comparator, Data, JsonInput, OperationResult, OutDataRecords, OutUnitId};
 
 pub mod api;
 pub mod common;
 pub mod database;
 
-#[ic_cdk::query]
+#[ic_cdk::query(guard = "caller_is_user")]
 fn greet(name: String) -> String {
     format!("Hello, {}!", name)
 }
@@ -110,7 +111,7 @@ fn greet(name: String) -> String {
 ///     * A vector of unit_id, which are the ids of the units that where inserted correctly
 ///     * Code 400 if there where any error in adding the data
 ///     * A message for more information about the result
-#[ic_cdk::update]
+#[ic_cdk::update(guard = "caller_is_user")]
 fn post_data(vec_json_data: Vec<JsonInput>) -> OperationResult {
     crate::api::create::post_data(vec_json_data)
 }
@@ -127,7 +128,7 @@ fn post_data(vec_json_data: Vec<JsonInput>) -> OperationResult {
 ///     * A vector having only the unit_id not found
 ///     * Code 404
 ///     * A message for more information about the error
-#[ic_cdk::query]
+#[ic_cdk::query(guard = "caller_is_user")]
 fn get_record(unit_id: String) -> Result<Vec<Data>, OperationResult> {
     crate::api::read::get_record(unit_id)
 }
@@ -141,7 +142,7 @@ fn get_record(unit_id: String) -> Result<Vec<Data>, OperationResult> {
 ///
 /// ## Returns
 /// * Vector of data and the length of the total records
-#[ic_cdk::query]
+#[ic_cdk::query(guard = "caller_is_user")]
 fn get_data(offset: u32, limit: u32, from_latest: bool) -> OutDataRecords {
     crate::api::read::get_data(offset, limit, from_latest)
 }
@@ -155,7 +156,7 @@ fn get_data(offset: u32, limit: u32, from_latest: bool) -> OutDataRecords {
 ///
 /// ## Returns
 /// Vector containig all the unit ids and the len of all the records
-#[ic_cdk::query]
+#[ic_cdk::query(guard = "caller_is_user")]
 fn get_all_unit_ids(offset: u32, limit: u32, from_latest: bool) -> OutUnitId {
     crate::api::read::get_all_unit_ids(offset, limit, from_latest)
 }
@@ -170,8 +171,13 @@ fn get_all_unit_ids(offset: u32, limit: u32, from_latest: bool) -> OutUnitId {
 ///
 /// ## Returns
 /// Vector containig all the datas and the len of all the records
-#[ic_cdk::query]
-fn get_data_by_multiple_ids(ids: Vec<String>, offset: u32, limit: u32, from_latest: bool) -> Result<OutDataRecords, OperationResult> {
+#[ic_cdk::query(guard = "caller_is_user")]
+fn get_data_by_multiple_ids(
+    ids: Vec<String>,
+    offset: u32,
+    limit: u32,
+    from_latest: bool,
+) -> Result<OutDataRecords, OperationResult> {
     crate::api::read::get_data_by_multiple_ids(ids, offset, limit, from_latest)
 }
 
@@ -186,7 +192,7 @@ fn get_data_by_multiple_ids(ids: Vec<String>, offset: u32, limit: u32, from_late
 ///
 /// ## Returns
 /// * Vector of data and the length of the total filtered values
-#[ic_cdk::query]
+#[ic_cdk::query(guard = "caller_is_user")]
 fn get_data_by_range(
     start: u64,
     end: Option<u64>,
@@ -207,7 +213,7 @@ fn get_data_by_range(
 ///
 /// ## Return
 /// * Vector containing all data logged from the sensor given in input and the length of the total filtered values
-#[ic_cdk::query]
+#[ic_cdk::query(guard = "caller_is_user")]
 fn get_data_by_sensor(
     sensor: String,
     offset: u32,
@@ -233,7 +239,7 @@ fn get_data_by_sensor(
 /// ## Return
 /// * Vector containing all data logged from the sensor given in input and the length of the total filtered values
 /// * OperationResult in the case the comparator is not well formatted
-#[ic_cdk::query]
+#[ic_cdk::query(guard = "caller_is_user")]
 fn get_data_by_sensor_filter(
     sensor: String,
     value: f32,
