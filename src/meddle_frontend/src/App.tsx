@@ -2,22 +2,91 @@ import { Actor, ActorMethod, HttpAgent } from "@dfinity/agent";
 import { AuthClient } from "@dfinity/auth-client";
 import type { Principal } from "@dfinity/principal";
 import { isSafari } from 'react-device-detect';
+import { _SERVICE } from '../../declarations/meddle_backend/meddle_backend.did';
 
 // @ts-ignore
 export const init = ({ IDL }) => {
   return [];
 };
 
-export interface _SERVICE {
-  whoami: ActorMethod<[], Principal>;
-}
-
 function App() {
   const webapp_id = process.env.CANISTER_ID_MEDDLE_BACKEND;
 
   // @ts-ignore - The interface of the whoami canister
-  const webapp_idl = ({ IDL }) => {
-    return IDL.Service({ whoami: IDL.Func([], [IDL.Principal], ["query"]) });
+  const webapp_idl =  ({ IDL }) => {
+    const OutUnitId = IDL.Record({
+      'len' : IDL.Nat32,
+      'unit_ids' : IDL.Vec(IDL.Text),
+    });
+    const Data = IDL.Record({
+      'value' : IDL.Float32,
+      'sensor_id' : IDL.Text,
+      'timestamp' : IDL.Nat64,
+      'unit_id' : IDL.Text,
+    });
+    const OutDataRecords = IDL.Record({
+      'len' : IDL.Nat32,
+      'data' : IDL.Vec(Data),
+    });
+    const OperationResult = IDL.Record({
+      'code' : IDL.Nat16,
+      'message' : IDL.Text,
+      'unit_id' : IDL.Vec(IDL.Text),
+    });
+    const OutputData = IDL.Variant({
+      'Ok' : OutDataRecords,
+      'Err' : OperationResult,
+    });
+    const SingleInput = IDL.Record({
+      'value' : IDL.Float32,
+      'sensorId' : IDL.Text,
+      'timestamp' : IDL.Nat64,
+      'timestampString' : IDL.Text,
+    });
+    const JsonInput = IDL.Record({
+      'endpoint' : IDL.Text,
+      'variables' : IDL.Vec(SingleInput),
+    });
+    return IDL.Service({
+      'get_all_unit_ids' : IDL.Func(
+          [IDL.Nat32, IDL.Nat32, IDL.Bool],
+          [OutUnitId],
+          ['query'],
+        ),
+      'get_data' : IDL.Func(
+          [IDL.Nat32, IDL.Nat32, IDL.Bool],
+          [OutDataRecords],
+          ['query'],
+        ),
+      'get_data_by_multiple_ids' : IDL.Func(
+          [IDL.Vec(IDL.Text), IDL.Nat32, IDL.Nat32, IDL.Bool],
+          [OutputData],
+          ['query'],
+        ),
+      'get_data_by_range' : IDL.Func(
+          [IDL.Nat64, IDL.Opt(IDL.Nat64), IDL.Nat32, IDL.Nat32, IDL.Bool],
+          [OutDataRecords],
+          ['query'],
+        ),
+      'get_data_by_sensor' : IDL.Func(
+          [IDL.Text, IDL.Nat32, IDL.Nat32, IDL.Bool],
+          [OutDataRecords],
+          ['query'],
+        ),
+      'get_data_by_sensor_filter' : IDL.Func(
+          [IDL.Text, IDL.Float32, IDL.Text, IDL.Nat32, IDL.Nat32, IDL.Bool],
+          [OutputData],
+          ['query'],
+        ),
+      'get_record' : IDL.Func(
+          [IDL.Text],
+          [IDL.Variant({ 'Ok' : IDL.Vec(Data), 'Err' : OperationResult })],
+          ['query'],
+        ),
+      'greet' : IDL.Func([IDL.Text], [IDL.Text], ['query']),
+      'post_data' : IDL.Func([IDL.Vec(JsonInput)], [OperationResult], []),
+      'whoami' : IDL.Func([], [IDL.Principal], ['query']),
+    });
   };
 
   // The <canisterId>.localhost URL is used as opposed to setting the canister id as a parameter
@@ -66,8 +135,23 @@ function App() {
       });
       // Call whoami which returns the principal (user id) of the current user.
       const principal = await webapp.whoami();
+
       // show the principal on the page
       document.getElementById("loginStatus")!.innerText = principal.toText();
+  }
+
+  async function handleGreet() {
+    const authClient = await AuthClient.create();
+    const identity = authClient.getIdentity();
+      // Using the identity obtained from the auth client, we can create an agent to interact with the IC.
+      const agent = new HttpAgent({ identity } as any);
+      // Using the interface description of our webapp, we create an actor that we use to call the service methods.
+      const webapp: _SERVICE = Actor.createActor(webapp_idl, {
+        agent,
+        canisterId: webapp_id!,
+      });
+    const temp = await webapp.greet(identity.getPrincipal().toString());
+      console.log(temp);
   }
 
   return (
@@ -79,6 +163,9 @@ function App() {
       </section>
       <section>
         <button id="loginBtn" onClick={handleLogin}>Login with Internet Identity</button>
+      </section>
+      <section>
+        <button id="loginBtn" onClick={handleGreet}>Greet with Internet Identity</button>
       </section>
       <section id="loginStatus">
         <p>Not logged in</p>
