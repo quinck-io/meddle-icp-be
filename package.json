@@ -20,7 +20,8 @@
     "@dfinity/auth-client": "^1.2.0",
     "@dfinity/identity": "^1.2.0",
     "ic-use-actor": "^0.0.9",
-    "ic-use-internet-identity": "^0.0.10"
+    "ic-use-internet-identity": "^0.0.10",
+    "react-device-detect": "^2.2.3"
   },
   "devDependencies": {
     "@types/node": "^20.12.7"

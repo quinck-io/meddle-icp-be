@@ -1,17 +1,7 @@
 import { Actor, ActorMethod, HttpAgent } from "@dfinity/agent";
 import { AuthClient } from "@dfinity/auth-client";
 import type { Principal } from "@dfinity/principal";
-
-const webapp_id = process.env.CANISTER_ID_MEDDLE_BACKEND;
-
-// The <canisterId>.localhost URL is used as opposed to setting the canister id as a parameter
-// since the latter is brittle with regards to transitively loaded resources.
-const local_ii_url = `http://127.0.0.1:4943/?canisterId=${process.env.CANISTER_ID_INTERNET_IDENTITY}`;
-
-// @ts-ignore - The interface of the whoami canister
-const webapp_idl = ({ IDL }) => {
-    return IDL.Service({ whoami: IDL.Func([], [IDL.Principal], ["query"]) });
-};
+import { isSafari } from 'react-device-detect';
 
 // @ts-ignore
 export const init = ({ IDL }) => {
@@ -22,17 +12,32 @@ export interface _SERVICE {
   whoami: ActorMethod<[], Principal>;
 }
 
-let iiUrl: string;
-
-if (process.env.DFX_NETWORK === "local") {
-  iiUrl = local_ii_url;
-} else if (process.env.DFX_NETWORK === "ic") {
-  iiUrl = `https://${process.env.CANISTER_ID_INTERNET_IDENTITY}.ic0.app`;
-} else {
-  iiUrl = local_ii_url;
-}
 
 function App() {
+
+  const webapp_id = process.env.CANISTER_ID_MEDDLE_BACKEND;
+
+
+  // @ts-ignore - The interface of the whoami canister
+  const webapp_idl = ({ IDL }) => {
+    return IDL.Service({ whoami: IDL.Func([], [IDL.Principal], ["query"]) });
+  };
+
+  // The <canisterId>.localhost URL is used as opposed to setting the canister id as a parameter
+  // since the latter is brittle with regards to transitively loaded resources.
+  const local_ii_url = isSafari ? 
+    `http://127.0.0.1:4943/?canisterId=${process.env.CANISTER_ID_INTERNET_IDENTITY}` : 
+    `http://${process.env.CANISTER_ID_INTERNET_IDENTITY}.localhost:4943/`;
+
+  let iiUrl: string;
+
+  if (process.env.DFX_NETWORK === "local") {
+    iiUrl = local_ii_url;
+  } else if (process.env.DFX_NETWORK === "ic") {
+    iiUrl = `https://${process.env.CANISTER_ID_INTERNET_IDENTITY}.ic0.app`;
+  } else {
+    iiUrl = local_ii_url;
+  }
 
   async function handleLogin() {
       // When the user clicks, we start the login process.
