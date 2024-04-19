@@ -7,11 +7,22 @@ pub mod api;
 pub mod common;
 pub mod database;
 
+/// Standard greet function to check the connection
+///
+/// ## Arguments
+/// * `name` - name to greet
+///
+/// ## Returns
+/// * a greet message as string
 #[ic_cdk::query(guard = "caller_is_user")]
 fn greet(name: String) -> String {
     format!("Hello, {}!", name)
 }
 
+/// Standard whoami to retrieve the principal
+///
+/// ## Returns
+/// * principal of the caller
 #[ic_cdk::query(guard = "caller_is_user")]
 fn whoami() -> Principal {
     ic_cdk::println!("{}", caller());
