@@ -3,18 +3,12 @@ import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import environment from 'vite-plugin-environment';
 import dotenv from 'dotenv';
-import { readCanisterIds } from "./vite.plugins";
 
 dotenv.config({ path: '../../.env' });
 
 export default defineConfig({
   build: {
     emptyOutDir: true,
-  },
-  define: {
-    "process.env": {
-      ...readCanisterIds(),
-    },
   },
   optimizeDeps: {
     esbuildOptions: {
