@@ -40,6 +40,7 @@ type OutputData = variant {
 
 service : {
     "greet": (text) -> (text) query;
+    "whoami": () -> (principal) query;
     "post_data": (vec_json_data: vec JsonInput) -> (output: OperationResult);
     "get_record": (unit_id: text) -> (output: variant { Ok: vec Data; Err: OperationResult;}) query;
     "get_all_unit_ids": (offset: nat32, limit: nat32, from_latest: bool) -> (output: OutUnitId) query;

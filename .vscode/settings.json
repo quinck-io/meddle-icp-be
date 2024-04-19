@@ -8,6 +8,7 @@
         "read-api",
         "create-api",
         "docs",
-        "clippy"
+        "clippy",
+        "internet identity",
     ]
 }
