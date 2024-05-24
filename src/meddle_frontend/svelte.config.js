@@ -11,10 +11,10 @@ const config = {
 			assets: "dist",
 			fallback: "200.html",
 			precompress: false,
-			strict: true,
+			strict: true
 		}),
 		alias: {
-			"$declarations/*": "../declarations/*",
+			"$declarations/*": "../declarations/*"
 		}
 	}
 }
