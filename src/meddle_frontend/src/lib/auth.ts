@@ -12,8 +12,13 @@ export async function login() {
 	if (!authClient) {
 		await initAuth()
 	}
+	const url =
+		process.env.DFX_NETWORK === "local"
+			? `http://localhost:4943/?canisterId=${process.env.CANISTER_ID_INTERNET_IDENTITY}`
+			: `https://${process.env.CANISTER_ID_INTERNET_IDENTITY}.ic0.app`
+
 	await authClient!.login({
-		identityProvider: "http://localhost:4943/?canisterId=bkyz2-fmaaa-aaaaa-qaaaq-cai",
+		identityProvider: url,
 		onSuccess: () => {
 			window.location.reload()
 		}
