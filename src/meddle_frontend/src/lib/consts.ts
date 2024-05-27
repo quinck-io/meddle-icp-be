@@ -55,3 +55,18 @@ export const DUMMY_IN: SensorData = {
 		}
 	]
 }
+
+export const jsonAreaPlaceholder = `Format:
+{
+	"endpoint": <string>,
+	"variables": [
+		{
+			"sensorId": <string>,
+			"value": <number>,
+			"timestamp": <bigint>,
+			"timestampString": <string>,
+			"payload": <unknown>
+		}
+	]
+}
+`

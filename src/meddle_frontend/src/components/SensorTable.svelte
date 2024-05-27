@@ -1,14 +1,15 @@
 <script lang="ts">
 	import { backendCanister } from "$lib/canisters"
-	import { DUMMY_IN } from "$lib/consts"
-	import { decodeSensorData, encodeRecords, type SensorRecord } from "$lib/types"
+	import { encodeRecords, type SensorData, type SensorRecord } from "$lib/types"
 	import { DataTable, Toolbar, ToolbarContent, Button, Pagination } from "carbon-components-svelte"
-	import { onMount } from "svelte"
+	import { createEventDispatcher, onMount } from "svelte"
 
 	let records: SensorRecord[] = []
 	let totalRecords = 0
 	let currentPage = 1
 	let pageSize = 10
+
+	const dispatch = createEventDispatcher<{ addrecord: void }>()
 
 	onMount(async () => {
 		await fetchRecords(0, pageSize)
@@ -18,11 +19,6 @@
 		const { data, len } = await backendCanister().get_data(offset, limit, true)
 		records = encodeRecords(data)
 		totalRecords = len
-	}
-
-	async function handleAddRecord() {
-		await backendCanister().post_data([decodeSensorData(DUMMY_IN)])
-		await fetchRecords(currentPage * pageSize, pageSize)
 	}
 
 	async function handlePageChange(page: number) {
@@ -48,10 +44,15 @@
 >
 	<Toolbar>
 		<ToolbarContent>
-			<Button on:click={handleAddRecord}>Add record</Button>
+			<Button
+				on:click={() => {
+					dispatch("addrecord")
+				}}>Add record</Button
+			>
 		</ToolbarContent>
 	</Toolbar>
 </DataTable>
+
 <Pagination
 	totalItems={totalRecords}
 	pageSizes={[10, 50, 100]}
