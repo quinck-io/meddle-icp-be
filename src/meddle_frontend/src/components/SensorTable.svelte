@@ -25,14 +25,14 @@
 		await fetchRecords(currentPage * pageSize, pageSize)
 	}
 
-	function handlePageChange(page: number) {
+	async function handlePageChange(page: number) {
 		currentPage = page
-		fetchRecords((currentPage - 1) * pageSize, pageSize)
+		await fetchRecords((currentPage - 1) * pageSize, pageSize)
 	}
 
-	function handlePageSizeChange(size: number) {
+	async function handlePageSizeChange(size: number) {
 		pageSize = size
-		fetchRecords((currentPage - 1) * pageSize, pageSize)
+		await fetchRecords((currentPage - 1) * pageSize, pageSize)
 	}
 </script>
 
@@ -57,10 +57,10 @@
 	pageSizes={[10, 50, 100]}
 	{pageSize}
 	page={currentPage}
-	on:click:button--next={() => handlePageChange(currentPage + 1)}
-	on:click:button--previous={() => handlePageChange(currentPage - 1)}
-	on:update={(e) => {
-		handlePageSizeChange(e.detail.pageSize)
-		handlePageChange(e.detail.page)
+	on:click:button--next={async () => await handlePageChange(currentPage + 1)}
+	on:click:button--previous={async () => await handlePageChange(currentPage - 1)}
+	on:update={async (e) => {
+		await handlePageSizeChange(e.detail.pageSize)
+		await handlePageChange(e.detail.page)
 	}}
 />
