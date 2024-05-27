@@ -1,4 +1,3 @@
-import type { Identity } from "@dfinity/agent"
 import { AuthClient } from "@dfinity/auth-client"
 
 let authClient: AuthClient | null = null
@@ -35,9 +34,9 @@ export async function isAuthenticated() {
 	return await authClient!.isAuthenticated()
 }
 
-export function getIdentity(): Identity | null {
+export async function getIdentity() {
 	if (!authClient) {
-		return null
+		await initAuth()
 	}
-	return authClient.getIdentity()
+	return authClient!.getIdentity()
 }

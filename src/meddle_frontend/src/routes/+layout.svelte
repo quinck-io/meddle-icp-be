@@ -14,7 +14,7 @@
 	onMount(async () => {
 		await initAuth()
 		authenticated = await isAuthenticated()
-		identity = authenticated ? getIdentity() : null
+		identity = authenticated ? await getIdentity() : null
 	})
 
 	function handleLogin() {
