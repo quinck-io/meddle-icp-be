@@ -5,12 +5,19 @@
 	import { decodeSensorData, sensorDataSchema } from "$lib/types"
 	import { fromError } from "zod-validation-error"
 	import { jsonAreaPlaceholder } from "$lib/consts"
+	import { isAuthenticated } from "$lib/auth"
+	import { onMount } from "svelte"
 
 	let modalOpen = false
+	let authenticated = false
 
 	let jsonValue = ""
 	let modalError = ""
 	let modalLoading = false
+
+	onMount(async () => {
+		authenticated = await isAuthenticated()
+	})
 
 	async function handleAddRecord() {
 		let parsed
@@ -37,7 +44,11 @@
 	}
 </script>
 
-<SensorTable on:addrecord={() => (modalOpen = true)} />
+{#if authenticated}
+	<SensorTable on:addrecord={() => (modalOpen = true)} />
+{:else}
+	<p>To view data, please login with Internet Identity.</p>
+{/if}
 
 <Modal
 	bind:open={modalOpen}
