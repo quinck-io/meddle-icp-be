@@ -3,11 +3,14 @@
 	import { encodeRecords, type SensorData, type SensorRecord } from "$lib/types"
 	import { DataTable, Toolbar, ToolbarContent, Button, Pagination } from "carbon-components-svelte"
 	import { createEventDispatcher, onMount } from "svelte"
+	import refresh from "carbon-icons-svelte/lib/renew.svelte"
 
 	let records: SensorRecord[] = []
 	let totalRecords = 0
 	let currentPage = 1
 	let pageSize = 10
+	let lastRefresh = new Date().toLocaleTimeString()
+	$: currentOffset = (currentPage - 1) * pageSize
 
 	const dispatch = createEventDispatcher<{ addrecord: void }>()
 
@@ -19,16 +22,17 @@
 		const { data, len } = await backendCanister().get_data(offset, limit, true)
 		records = encodeRecords(data)
 		totalRecords = len
+		lastRefresh = new Date().toLocaleTimeString()
 	}
 
 	async function handlePageChange(page: number) {
 		currentPage = page
-		await fetchRecords((currentPage - 1) * pageSize, pageSize)
+		await fetchRecords(currentOffset, pageSize)
 	}
 
 	async function handlePageSizeChange(size: number) {
 		pageSize = size
-		await fetchRecords((currentPage - 1) * pageSize, pageSize)
+		await fetchRecords(currentOffset, pageSize)
 	}
 </script>
 
@@ -41,9 +45,18 @@
 		{ key: "timestamp", value: "Timestamp" }
 	]}
 	rows={records}
+	description="Last refresh: {lastRefresh}"
 >
 	<Toolbar>
 		<ToolbarContent>
+			<Button
+				kind="ghost"
+				icon={refresh}
+				iconDescription="Refresh data"
+				on:click={async () => {
+					await fetchRecords(currentOffset, pageSize)
+				}}
+			></Button>
 			<Button
 				on:click={() => {
 					dispatch("addrecord")
